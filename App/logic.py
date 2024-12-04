@@ -19,20 +19,40 @@ def load_data(catalog, filename):
     Carga los datos del reto
     """
     # TODO: Realizar la carga de datos
-    relationships = "relationships_"+filename+".csv"
-    userinfo = "users_info_"+filename+".csv"    
-    with open(filename, mode='r') as csv_file:    
-        csv_reader = csv.DictReader(csv_file)   
-        #Un poco demorado pero parece servir? Con tal que la carga sea rapida y los REQ's se manejen rapido esta bien (:    
-        #Accidents-large toma 12 segundos para cargar en mi PC ><
-        #Small esta listo en 2.5 entonces bien C:
+    relationships = "Data/relationships_"+filename+".csv"
+    userinfo = "Data/users_info_"+filename+".csv" 
+       
+    with open(userinfo, mode='r') as csv_file:    
+        csv_reader = csv.DictReader(csv_file, delimiter=';')   
+        user = {"ID" : "", "UserData" : {"USER_NAME": "", 
+                                         "USER_TYPE": "", 
+                                         "AGE": 0,
+                                         "JOIN_DATE" : "",
+                                         "PHOTO" : "",
+                                         "HOBBIES" : "",
+                                         "CITY" : "",
+                                         "LATITUDE": 0,
+                                         "LONGITUDE" : 0                                                      
+                                         }}   
         for row in csv_reader:
-            for tipo_info in catalog:
-                if row[tipo_info] == "" or row[tipo_info] == " ":                    
-                    rbt.put(catalog[tipo_info], row["ID"], "Unknown")                
-                else:                
-                    rbt.put(catalog[tipo_info], row["ID"], row[tipo_info])                   
-        return catalog
+            if row["USER_ID"] == '' or row["USER_ID"] == ' ':
+                user["ID"] == 'Unknown'
+            else:
+                user["ID"] = row["USER_ID"]
+                
+            for dato in user["UserData"]:
+                if row[dato] == '' or row[dato] == ' ':
+                    user["UserData"][dato] = ' Unknown'
+                else:
+                    user["UserData"][dato] = row[dato]
+            
+    
+        
+        
+        
+        
+                
+            
 
 # Funciones de consulta sobre el catálogo
 

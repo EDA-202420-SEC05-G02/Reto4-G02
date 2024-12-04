@@ -101,4 +101,17 @@ def add_edge(graph, vertex_a, vertex_b, weight):
     vertex_data_a["elements"] = edges_a
     vertex_data_a["size"] += 1
     graph["edges"] += 1
+    
+def contains_vertex(my_graph, key_vertex):
+    """
+    Retorna si el vertice con llave key_vertex esta presente en el grafo.
+
+    Parameters:
+    my_graph (adj_list_graph) -- El grafo sobre el cual consultar la existencia del vertice
+    key_vertex (any) -- Vertice a buscar
+
+    Returns:
+    True si el vertice esta presente, False en caso contrario
+    """
+    return key_vertex in my_graph["vertices"]
 
