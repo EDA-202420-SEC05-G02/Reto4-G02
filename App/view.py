@@ -29,8 +29,16 @@ def load_data(control):
     """
     #TODO: Realizar la carga de datos
     control = lg.load_data(control, "10")
-    print (control)
-    return (control)
+    total_usuarios = len(control['vertices']['table']['elements'])
+    conexiones = control['edges']
+    basicos = "La cantidad de usuarios basicos es: "+str(lg.auxiliaresload(control)[0])
+    premium = "La cantidad de usuarios premium es: "+str(lg.auxiliaresload(control)[1])
+    ciudad = "La cantidad de usuarios basicos es: "+str(lg.auxiliaresload(control)[2]+". Con un total de " + str(lg.auxiliaresload(control)[3])+" habitantes.")
+    print ("Total usuarios: ", str(total_usuarios))
+    print ("Total de conexiones: ", str(conexiones))
+    print (basicos)
+    print (premium)
+    print (ciudad)
     
 
 

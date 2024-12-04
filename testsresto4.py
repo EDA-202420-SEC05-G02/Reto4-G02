@@ -59,9 +59,18 @@ def load_data(catalog, filename):
                 else:
                     user["UserData"][dato] = row[dato]
                 # Ahora agrega los datos de user en information
-            userdict[user['ID']] = user['UserData']                
+            userdict[user['ID']] = user['UserData']
+            user = {"ID" : "", "UserData" : {"USER_NAME": "", 
+                                    "USER_TYPE": "", 
+                                    "AGE": 0,
+                                    "JOIN_DATE" : "",
+                                    "PHOTO" : "",
+                                    "HOBBIES" : "",
+                                    "CITY" : "",
+                                    "LATITUDE": 0,
+                                    "LONGITUDE" : 0                                                        
+                                         }}                   
             usuarios += 1
-
         # Contador para verificar la existencia de ids de relationship en user_data :)
         # Tambien se encarga de eliminar duplicados en el dict de relaciones
         notfound = 0
@@ -82,7 +91,7 @@ def load_data(catalog, filename):
         # Agregar arcos al grafo usando relationshipsdict
 
         
-        return catalog  
+        return 
             
 
                     

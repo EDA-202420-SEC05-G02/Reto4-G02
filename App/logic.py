@@ -64,12 +64,23 @@ def load_data(catalog, filename):
                 else:
                     user["UserData"][dato] = row[dato]
                 # Ahora agrega los datos de user en information
-            userdict[user['ID']] = user['UserData']                
+            userdict[user['ID']] = user['UserData']        
+            user = {"ID" : "", "UserData" : {"USER_NAME": "", 
+                        "USER_TYPE": "", 
+                        "AGE": 0,
+                        "JOIN_DATE" : "",
+                        "PHOTO" : "",
+                        "HOBBIES" : "",
+                        "CITY" : "",
+                        "LATITUDE": 0,
+                        "LONGITUDE" : 0                                                        
+                                }}               
             usuarios += 1
 
         # Contador para verificar la existencia de ids de relationship en user_data :)
         # Tambien se encarga de eliminar duplicados en el dict de relaciones
         notfound = 0
+        print ('========================================================================================================')
         print ('Total usuarios en user_data = ',str(len(userdict)),', Total usuarios en relationship = ',str(len(relationshipsdict)))        
         for value in list(relationshipsdict.keys()):
             if value not in userdict:
@@ -77,6 +88,8 @@ def load_data(catalog, filename):
                 del relationshipsdict[value]                
         print ('Hay', str(notfound), 'IDs de', relationships, 'que no se encuentran en', userinfo ,'!!!!')
         print ('Los IDs faltantes han sido eliminados.')
+        print ('========================================================================================================')
+
         # Ahora si agrega todo al graph
         catalog['information']['table']['elements'] = userdict
         catalog['information']['table']['size'] = len(userdict) # Actualiza Size
@@ -89,9 +102,30 @@ def load_data(catalog, filename):
         
         return catalog  
             
+#Funcions auxiliares para load_data en view :3
+def auxiliaresload(catalog):
+    basicos = 0
+    premium = 0
+    #Crea un nuevo dict para verificar la cantidad de usuarios premium y basic, y para verificar la ciudad mas famosa
+    #Usaria un BFS pero no necesito saber nada de conexiones ni vertices     
+    userdict = catalog['information']['table']['elements']  
+    cities = [user_data['CITY'] for user_data in userdict.values()]  
+    for usuario in userdict:
+        if userdict[usuario]['USER_TYPE'] == 'basic':
+            basicos +=1
+        else:
+            premium +=1  
+    #Se crea otro dict para verificar        
+    city_count = {}
+    for user_data in userdict.values():
+        city = user_data['CITY']
+        if city != ' Unknown':
+            if city not in city_count:
+                city_count[city] = 0
+            city_count[city] += 1    
+    most_common_city = max(city_count, key=city_count.get)
     
-        
-        
+    return basicos,premium,most_common_city, city_count[most_common_city]
         
         
                 
