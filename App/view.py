@@ -83,7 +83,10 @@ def print_req_4(control):
         Función que imprime la solución del Requerimiento 4 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 4
-    pass
+    userA = float(input("Ingrese el usuario A: "))
+    userB = float(input("Ingrese el usuario B: "))
+    req4 = lg.req_4(control,userA, userB)
+    print (req4)
 
 
 def print_req_5(control):

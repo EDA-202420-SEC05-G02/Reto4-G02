@@ -236,12 +236,23 @@ def req_3(catalog,start_id):
 
 
 
-def req_4(catalog):
+def req_4(catalog,cuentaA, cuentaB):
     """
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
-    pass
+    relationshipgraph = catalog['vertices']['table']['elements']  
+    usergaph = catalog['information']['table']['elements']  
+    print (relationshipgraph)
+    listado = {}
+    Afriends = relationshipgraph[cuentaA] 
+    Bfriends = relationshipgraph[cuentaB] 
+    for amigo in Afriends:
+        if amigo in Bfriends:
+            listado[amigo] = {"Username": usergaph['USER_NAME'], "Tipo" : usergaph["USER_TYPE"]} 
+            
+            
+    return listado
 
 
 def req_5(catalog):
