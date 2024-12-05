@@ -241,9 +241,9 @@ def req_4(catalog,cuentaA, cuentaB):
     Retorna el resultado del requerimiento 4
     """
     # TODO: Modificar el requerimiento 4
+    start_time = time.time()
     relationshipgraph = catalog['vertices']['table']['elements']  
     usergaph = catalog['information']['table']['elements']  
-    print (relationshipgraph)
     listado = {}
     Afriends = relationshipgraph[cuentaA] 
     Bfriends = relationshipgraph[cuentaB] 
@@ -251,8 +251,11 @@ def req_4(catalog,cuentaA, cuentaB):
         if amigo in Bfriends:
             listado[amigo] = {"Username": usergaph['USER_NAME'], "Tipo" : usergaph["USER_TYPE"]} 
             
-            
-    return listado
+    execution_time = time.time() - start_time    
+    execution_time = "Tiempo de ejecucion: " + str(execution_time)+" s"
+    if listado == {}:
+        listado = 'No hay amigos en comun.'
+    return execution_time, listado
 
 
 def req_5(catalog):
