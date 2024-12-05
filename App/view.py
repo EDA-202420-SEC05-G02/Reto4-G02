@@ -28,7 +28,7 @@ def load_data(control):
     Carga los datos
     """
     #TODO: Realizar la carga de datos
-    control = lg.load_data(control, "10")
+    control = lg.load_data(control, "large")
     total_usuarios = len(control['vertices']['table']['elements'])
     conexiones = control['edges']
     basicos = "La cantidad de usuarios basicos es: "+str(lg.auxiliaresload(control)[0])
@@ -54,8 +54,11 @@ def print_req_1(control):
         Función que imprime la solución del Requerimiento 1 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 1
-    pass
-
+    start_id=float(input("Digite el id inicial: "))
+    end_id=float(input("Digite el id final: "))
+    req= lg.req_1(control,start_id,end_id)
+    print(req)
+    
 
 def print_req_2(control):
     """
@@ -70,7 +73,9 @@ def print_req_3(control):
         Función que imprime la solución del Requerimiento 3 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 3
-    pass
+    start_id=float(input("Digite el id: "))
+    req= lg.req_3(control,start_id)
+    print(req)
 
 
 def print_req_4(control):
@@ -94,7 +99,9 @@ def print_req_6(control):
         Función que imprime la solución del Requerimiento 6 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 6
-    pass
+    N=int(input("Digite el numero de usuarios deseado: "))
+    req= lg.req_6(control,N)
+    print(req)
 
 
 def print_req_7(control):

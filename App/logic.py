@@ -1,6 +1,7 @@
 import time
 from DataStructures.Graph import adj_list_graph as adj
 import csv
+from collections import deque
 
 
 def new_logic():
@@ -127,10 +128,6 @@ def auxiliaresload(catalog):
     
     return basicos,premium,most_common_city, city_count[most_common_city]
         
-        
-                
-            
-
 # Funciones de consulta sobre el catálogo
 
 def get_data(catalog, id):
@@ -140,13 +137,66 @@ def get_data(catalog, id):
     #TODO: Consulta en las Llamar la función del modelo para obtener un dato
     pass
 
+def req_1(catalog, start_id, end_id):
+    """
+    Encuentra el camino más corto entre dos usuarios en el grafo.
+    """
+    start_time = time.time()
 
-def req_1(catalog):
-    """
-    Retorna el resultado del requerimiento 1
-    """
-    # TODO: Modificar el requerimiento 1
-    pass
+    vertices = catalog["vertices"]["table"]["elements"]
+    user_data = catalog["information"]["table"]["elements"]
+    
+    if start_id not in vertices or end_id not in vertices:
+        return {
+            "time": time.time() - start_time,
+            "message": "Uno o ambos usuarios no existen en el grafo.",
+            "path_details": None
+        }
+
+    visited = set()
+    queue = deque([[start_id]])
+    path = []
+
+    while queue:
+        current_path = queue.popleft()
+        current_node = current_path[-1]
+
+        if current_node == end_id:
+            path = current_path
+            break
+
+        if current_node not in visited:
+            visited.add(current_node)
+            neighbors = vertices.get(current_node, [])
+            for neighbor in neighbors:
+                new_path = list(current_path)
+                new_path.append(neighbor)
+                queue.append(new_path)
+
+    execution_time = time.time() - start_time
+    if path:
+        path_details = []
+        for node in path:
+            user_info = user_data.get(node, {})
+            path_details.append({
+                "id": node,
+                "alias": user_info.get("USER_NAME", "Unknown"),
+                "user_type": user_info.get("USER_TYPE", "Unknown"),
+                "city": user_info.get("CITY", "Unknown"),
+                "hobbies": user_info.get("HOBBIES", "Unknown"),
+            })
+
+        return {
+            "time": execution_time,
+            "people_in_path": len(path) - 1,
+            "path_details": path_details,
+        }
+    else:
+        return {
+            "time": execution_time,
+            "message": "No se encontró un camino entre los usuarios.",
+            "path_details": None
+        }
 
 
 def req_2(catalog):
@@ -157,12 +207,46 @@ def req_2(catalog):
     pass
 
 
-def req_3(catalog):
+def req_3(catalog,start_id):
     """
     Retorna el resultado del requerimiento 3
     """
     # TODO: Modificar el requerimiento 3
-    pass
+    start_time = time.time()
+    
+    vertices = catalog["vertices"]["table"]["elements"]
+    if start_id not in vertices:
+        return {
+            "time": time.time() - start_time,
+            "message": f"El usuario con ID {start_id} no existe en el grafo.",
+            "popular_friend": None,
+            "followers_count": 0,
+        }
+    
+    friends = vertices.get(start_id, [])
+    if not friends:
+        return {
+            "time": time.time() - start_time,
+            "message": f"El usuario con ID {start_id} no tiene amigos (seguidores).",
+            "popular_friend": None,
+            "followers_count": 0,
+        }
+    
+    max_followers = -1
+    popular_friend = None
+    for friend_id in friends:
+        follower_count = len(vertices.get(friend_id, []))
+        if follower_count > max_followers:
+            max_followers = follower_count
+            popular_friend = friend_id
+    
+    execution_time = time.time() - start_time
+    return {
+        "time": execution_time,
+        "popular_friend": popular_friend,
+        "followers_count": max_followers,
+    }
+
 
 
 def req_4(catalog):
@@ -180,12 +264,63 @@ def req_5(catalog):
     # TODO: Modificar el requerimiento 5
     pass
 
-def req_6(catalog):
+def req_6(catalog, N):
     """
     Retorna el resultado del requerimiento 6
     """
     # TODO: Modificar el requerimiento 6
-    pass
+    start_time = time.time()
+    
+    if N < 2:
+        return {
+            "time": time.time() - start_time,
+            "message": "N debe ser mayor o igual a 2.",
+            "popular_users": [],
+            "tree": None,
+        }
+    
+    vertices = catalog["vertices"]["table"]["elements"]
+    
+    user_followers_count = {}
+    for user_id, followed_users in vertices.items():
+        user_followers_count[user_id] = len(followed_users)
+    
+    sorted_users = sorted(user_followers_count.items(), key=lambda x: x[1], reverse=True)
+    popular_users = sorted_users[:N]
+    popular_user_ids = [user[0] for user in popular_users]
+    popular_user_info = []
+
+    for user_id in popular_user_ids:
+        user_data = catalog['information']['table']['elements'].get(user_id, {})
+        user_name = user_data.get('USER_NAME', 'Unknown')
+        popular_user_info.append({'ID': user_id, 'Name': user_name, 'Followers': user_followers_count[user_id]})
+    
+    tree = None
+    connected = check_if_tree_exists(catalog, popular_user_ids)
+    execution_time = time.time() - start_time
+    
+    return {
+        "time": execution_time,
+        "popular_users": popular_user_info,
+        "tree": connected,
+    }
+
+def check_if_tree_exists(catalog, user_ids):
+    visited = set()
+    queue = deque([user_ids[0]])
+    
+    while queue:
+        current_user = queue.popleft()
+        if current_user in visited:
+            continue
+        visited.add(current_user)
+        friends = catalog["vertices"]["table"]["elements"].get(current_user, [])
+        
+        for friend in friends:
+            if friend in user_ids and friend not in visited:
+                queue.append(friend)
+
+    return all(user_id in visited for user_id in user_ids)
 
 
 def req_7(catalog):
