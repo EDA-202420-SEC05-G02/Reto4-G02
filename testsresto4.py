@@ -91,8 +91,10 @@ def load_data(catalog, filename):
         # Agregar arcos al grafo usando relationshipsdict
 
         
-        return 
+        return catalog
             
 
-                    
-print (load_data(catalog,"10"))
+
+
+
+
