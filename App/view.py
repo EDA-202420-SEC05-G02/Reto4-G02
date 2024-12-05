@@ -112,8 +112,10 @@ def print_req_7(control):
         Función que imprime la solución del Requerimiento 7 en consola
     """
     # TODO: Imprimir el resultado del requerimiento 7
-    pass
-
+    start_user = float(input("Ingrese el usuario origen: "))
+    hobbies = input("Ingrese los hobbies deseados:")    
+    req7 = lg.req_7(control, start_user, hobbies)
+    print (req7)
 
 def print_req_8(control):
     """

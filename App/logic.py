@@ -326,12 +326,48 @@ def check_if_tree_exists(catalog, user_ids):
     return all(user_id in visited for user_id in user_ids)
 
 
-def req_7(catalog):
+def req_7(catalog, start_user, hobbies):
     """
     Retorna el resultado del requerimiento 7
     """
-    # TODO: Modificar el requerimiento 7
-    pass
+    start_time = time.time()
+    vertices = catalog["vertices"]["table"]["elements"]
+    user_data = catalog["information"]["table"]["elements"]
+
+    visited = set()
+    queue = deque([(start_user, 0)])  # (user_id, depth)
+    friends_info = []
+
+    while queue:
+        current_user, depth = queue.popleft()
+
+        if current_user in visited:
+            continue
+
+        visited.add(current_user)
+        neighbors = vertices.get(current_user, [])
+
+        for neighbor in neighbors:
+            if neighbor not in visited:
+                queue.append((neighbor, depth + 1))
+                neighbor_data = user_data.get(neighbor, {})
+                neighbor_hobbies = neighbor_data.get("HOBBIES", "").split(', ')
+                shared_hobbies = set(hobbies).intersection(neighbor_hobbies)
+
+                if shared_hobbies:
+                    friends_info.append({
+                        "id": neighbor,
+                        "alias": neighbor_data.get("USER_NAME", "Unknown"),
+                        "user_type": neighbor_data.get("USER_TYPE", "Unknown"),
+                        "depth": depth + 1,
+                        "shared_hobbies": list(shared_hobbies)
+                    })
+
+    execution_time = time.time() - start_time
+    return {
+        "time": execution_time,
+        "friends": friends_info
+    }
 
 
 def req_8(catalog):
