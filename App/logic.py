@@ -78,20 +78,7 @@ def load_data(catalog, filename):
                                 }}               
             usuarios += 1
 
-        # Contador para verificar la existencia de ids de relationship en user_data :)
-        # Tambien se encarga de eliminar duplicados en el dict de relaciones
-        notfound = 0
-        print ('========================================================================================================')
-        print ('Total usuarios en user_data = ',str(len(userdict)),', Total usuarios en relationship = ',str(len(relationshipsdict)))        
-        for value in list(relationshipsdict.keys()):
-            if value not in userdict:
-                notfound += 1
-                del relationshipsdict[value]                
-        print ('Hay', str(notfound), 'IDs de', relationships, 'que no se encuentran en', userinfo ,'!!!!')
-        print ('Los IDs faltantes han sido eliminados.')
-        print ('========================================================================================================')
-
-        # Ahora si agrega todo al graph
+         # Ahora si agrega todo al graph
         catalog['information']['table']['elements'] = userdict
         catalog['information']['table']['size'] = len(userdict) # Actualiza Size
         catalog['vertices']['table']['elements'] = relationshipsdict
@@ -101,7 +88,7 @@ def load_data(catalog, filename):
         # Agregar arcos al grafo usando relationshipsdict
 
         
-        return catalog  
+        return catalog
             
 #Funcions auxiliares para load_data en view :3
 def auxiliaresload(catalog):
