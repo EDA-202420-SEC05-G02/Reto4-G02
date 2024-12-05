@@ -248,8 +248,11 @@ def req_4(catalog,cuentaA, cuentaB):
     Afriends = relationshipgraph[cuentaA] 
     Bfriends = relationshipgraph[cuentaB] 
     for amigo in Afriends:
-        if amigo in Bfriends:
-            listado[amigo] = {"Username": usergaph['USER_NAME'], "Tipo" : usergaph["USER_TYPE"]} 
+        #Verificar si son amigos
+        if cuentaA in relationshipgraph[amigo]:
+            if amigo in Bfriends:
+                print (usergaph)
+                listado[amigo] = {"Username": usergaph[amigo]['USER_NAME'], "Tipo" : usergaph[amigo]["USER_TYPE"]} 
             
     execution_time = time.time() - start_time    
     execution_time = "Tiempo de ejecucion: " + str(execution_time)+" s"
